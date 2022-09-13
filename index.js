@@ -404,7 +404,7 @@ io.on('connection', function(socket){
 
     con.query("select count(id_group) from group_members where id_group = '"+id+"' ", function (err, result) {
 
-      var resultArray = Object.values(JSON.parse(JSON.stringify(result)))
+      var resultArray = Object.values(JSON.parse(JSON.stringify(result[0])))
 
       socket.emit('connected_name_group', {message_member: resultArray[0]} ) ;
 
