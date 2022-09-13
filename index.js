@@ -27,10 +27,6 @@ con.connect(function(err) {
 
 });
 
-
-//var sqlite3 = require('sqlite3').verbose();
-//var db = new sqlite3.Database('chillchat.db');
-
 var image_profile = "https://s6.uupload.ir/files/icon_defult_0rl5.jpg"
 
 var image_save = "https://s6.uupload.ir/files/save_icon_alf9.png"
@@ -209,18 +205,23 @@ io.on('connection', function(socket){
 
 
       } else {
-        
-        var group = result[0].id_group;
-        var id_message = result[0].id_message;
-        var type = result[0].type_message;
-        var message = result[0].message;
-        var id_sender_message = result[0].id_sender_message;
-        var name_sender = result[0].name_sender;
-        var img_sender = result[0].img_sender;
-        var time_sender = result[0].time_sender;
-        
-        socket.emit("read_list_chated", { id_group_list: group , id_message_list: id_message , type_list: type , message_list: message , id_sender_message_list: id_sender_message , name_sender_list: name_sender , img_sender_list: img_sender , time_sender_list: time_sender } );
 
+        Object.keys(result).forEach(function(key) {
+
+          var row = result[key];
+          
+          var group = row.id_group;
+          var id_message = row.id_message;
+          var type = row.type_message;
+          var message = row.message;
+          var id_sender_message = row.id_sender_message;
+          var name_sender = row.name_sender;
+          var img_sender = row.img_sender;
+          var time_sender = row.time_sender;
+
+          socket.emit("read_list_chated", { id_group_list: group , id_message_list: id_message , type_list: type , message_list: message , id_sender_message_list: id_sender_message , name_sender_list: name_sender , img_sender_list: img_sender , time_sender_list: time_sender } );
+    
+        });
       }
 
     });
