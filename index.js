@@ -28,7 +28,6 @@ con.connect(function(err) {
 });
 
 
-
 //var sqlite3 = require('sqlite3').verbose();
 //var db = new sqlite3.Database('chillchat.db');
 
@@ -349,7 +348,7 @@ io.on('connection', function(socket){
 
   socket.on('add_user_member' , function(id,username) {
 
-    con.query("INSERT INTO group_members (id_group,id_user) VALUES ('"+id+"','"+username+"') " , function (err, result) {
+    con.query('INSERT INTO group_members (id_group,id_user) VALUES (?,?) ' , [id, username] , function (err, result) {
 
       socket.emit('added_user_member', {message_add : 'added'} );
 
@@ -359,7 +358,7 @@ io.on('connection', function(socket){
 
   socket.on('add_member_group' , function(id,username) {
 
-    con.query("INSERT INTO group_members (id_group,id_user) VALUES ('"+id+"','"+username+"') " , function (err, result) {
+    con.query('INSERT INTO group_members (id_group,id_user) VALUES (?,?) ' , [id, username] , function (err, result) {
 
       socket.emit('added_member_group', {message_adds : username} );
 
@@ -417,7 +416,7 @@ io.on('connection', function(socket){
 
     con.query("select id_group from group_members where id_user = '"+username+"' ", function (err, result) {
 
-      var resultArray = Object.values(JSON.parse(JSON.stringify(result)))
+      var resultArray = Object.values(JSON.parse(JSON.stringify(result[0])))
     
       socket.emit('readied_list_groups', {message_read: resultArray[0] } ) ;
 
@@ -447,9 +446,9 @@ io.on('connection', function(socket){
 
     con.query("select count(id_group) from group_members where id_group = '"+id+"' and status = '"+'online'+"' ", function (err, result) {
 
-      var resultArray = Object.values(JSON.parse(JSON.stringify(result)))
+      var resultArray = Object.values(JSON.parse(JSON.stringify(result[0])))
 
-      socket.emit('stated_group', {message_online: resultArray[0]} ) ;
+      socket.emit('stated_group', { message_online: resultArray[0] } ) ;
 
     });
     
