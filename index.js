@@ -28,6 +28,7 @@ con.connect(function(err) {
 });
 
 
+
 //var sqlite3 = require('sqlite3').verbose();
 //var db = new sqlite3.Database('chillchat.db');
 
@@ -150,9 +151,9 @@ io.on('connection', function(socket){
     } else {
 
     }
-    
-    con.query("INSERT INTO group_messages (id_group,id_message,type_message,message,id_sender_message,name_sender,img_sender,time_sender) VALUES ('"+id_group+"','"+id_messages+"','"+type+"','"+message+"','"+user+"','"+name+"','"+img+"','"+time+"') " , function (err, result) {
 
+    con.query('INSERT INTO group_messages (id_group,id_message,type_message,message,id_sender_message,name_sender,img_sender,time_sender) VALUES (?,?,?,?,?,?,?,?) ' , [id_group, id_messages, type, message, user, name, img, time] , function (err, result) {
+      
       io.emit('sended_message_group' ,  { send_id_messages: id_messages , send_id_group: id_group , send_type: type , send_message: message , send_user: user , send_name: name , send_img: img , send_time: time } );
 
     });
@@ -318,7 +319,7 @@ io.on('connection', function(socket){
 
   socket.on('create_private_message', function(username_one,username_two) {
 
-    con.query("INSERT INTO private_chats (user_one,user_two) VALUES ('"+username_one+"','"+username_two+"') " , function (err, result) {
+    con.query("INSERT INTO private_chats (user_one,user_two) VALUES (?,?) " , [username_one , username_two], function (err, result) {
 
       socket.emit('created_private_message', { message_create: username_two } );
 
