@@ -446,7 +446,7 @@ io.on('connection', function(socket){
 
         var row = result[key];
 
-        socket.emit('readied_list_groups', {message_read: row.id_group } ) ;
+        socket.emit('readied_list_groups', { message_read: row.id_group } ) ;
 
       })
 
@@ -458,15 +458,21 @@ io.on('connection', function(socket){
 
     con.query("SELECT id_group,id_user,status_admin FROM group_members WHERE id_group = '"+id+"' AND id_user = '"+username+"'  " , function (err, result) {
 
-      if (result[0].status_admin == 'is') {
+      Object.keys(result).forEach(function(key) {
 
-        socket.emit('checked_admin_group', { message_admin: 'is admin' , message_type: type } );
+        var row = result[key];
 
-      } else {
+        if (row.status_admin == 'is') {
 
-        socket.emit('checked_admin_group', { message_admin: 'is not admin' , message_type: type } );
+          socket.emit('checked_admin_group', { message_admin: 'is admin' , message_type: type } );
+  
+        } else {
+  
+          socket.emit('checked_admin_group', { message_admin: 'is not admin' , message_type: type } );
+  
+        }
 
-      }
+      })
 
     });
   
