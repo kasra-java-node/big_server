@@ -94,8 +94,6 @@ io.on('connection', function(socket){
     con.query("SELECT name,chats FROM users WHERE username = '"+username+"' AND password = '"+password+"' " , function (err, result) {
 
       if (result.length == 0) {
-        
-        console.log("error");
 
         var message_error = 'The username or password is incorrect !'
         
@@ -104,14 +102,12 @@ io.on('connection', function(socket){
       } else {
 
         var message_ok = 'Login was successful ✅'
-        
-        console.log("success");
 
         Object.keys(result).forEach(function(key) {
 
           var row = result[key];
 
-          socket.emit('ok_username', {ok_key:row.name} , {chats_key:row.chats} );
+          socket.emit('ok_username', {ok_key:row.name , chats_key:row.chats} );
 
 
         });
