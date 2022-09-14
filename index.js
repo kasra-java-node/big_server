@@ -37,32 +37,6 @@ var image_channel = "https://s6.uupload.ir/files/icon_q897.png"
 
 var image_bot = "https://s6.uupload.ir/files/icon_bot_vi58.png"
 
-/*
-db.serialize(function() {
- 
-  db.run("CREATE TABLE if not exists users (name TEXT, username TEXT PRIMARY KEY, password TEXT, chats TEXT, image TEXT DEFAULT  '"+image_profile+"'  , bio TEXT DEFAULT 'Keep your friends, loneliness is not good :)', tag TEXT) ");
-
-  db.run("CREATE TABLE if not exists save_message (id INTEGER PRIMARY KEY, chat_name TEXT, id_user TEXT, image TEXT DEFAULT  '"+image_save+"' , last_message TEXT , date_last_message TEXT ) ");
-
-  db.run("CREATE TABLE if not exists channel_news (id INTEGER PRIMARY KEY, chat_name TEXT, id_user TEXT, image TEXT DEFAULT  '"+image_channel+"' , last_message TEXT , date_last_message TEXT) ");
-
-  db.run("CREATE TABLE if not exists bots (id INTEGER PRIMARY KEY, chat_name TEXT, id_user TEXT, image TEXT DEFAULT  '"+image_bot+"' , last_message TEXT , date_last_message TEXT) ");
-
-  db.run("CREATE TABLE if not exists private_chats  (id INTEGER PRIMARY KEY, user_one TEXT, user_two TEXT) " );
-
-  db.run("CREATE TABLE if not exists group_chats  (id INTEGER PRIMARY KEY, name_group TEXT, id_group TEXT , image TEXT DEFAULT '"+image_group+"' , user_create TEXT , time TEXT ) " );
-
-  db.run("CREATE TABLE if not exists group_members  (id INTEGER PRIMARY KEY, id_group TEXT, id_user TEXT, status TEXT, status_admin TEXT DEFAULT 'is not' ) " );
-
-  db.run("CREATE TABLE if not exists group_messages  (id INTEGER PRIMARY KEY, id_group TEXT , id_message TEXT , type_message TEXT , message TEXT, id_sender_message TEXT, name_sender TEXT, img_sender TEXT, time_sender TEXT ) " );
-
-});
-
-db.run('INSERT INTO group_messages (id_group,id_message,type_message,message,id_sender_message,name_sender,img_sender,time_sender) VALUES (?,?,?,?,?,?,?,?) ' , ['chillchat~group?!://09ce640b670b5bb422f0a5e19a4d3e23dfdb0aad' , 'alfoahfoswdsww' , 'message' , 'it is good' , 'poyan015' , 'poyan' , 'https://s6.uupload.ir/files/icon_defult_0rl5.jpg' , '7:50' ]  ,  function(err) {
-
-});
-*/
-
 var port = 8000
 
 app.get('/', (req, res) => {
@@ -468,9 +442,13 @@ io.on('connection', function(socket){
 
     con.query("select id_group from group_members where id_user = '"+username+"' ", function (err, result) {
 
-      var resultArray = Object.values(JSON.parse(JSON.stringify(result[0])))
-    
-      socket.emit('readied_list_groups', {message_read: resultArray[0] } ) ;
+      Object.keys(result).forEach(function(key) {
+
+        var row = result[key];
+
+        socket.emit('readied_list_groups', {message_read: row.id_group } ) ;
+
+      })
 
     });
 
