@@ -128,8 +128,15 @@ io.on('connection', function(socket){
       } else {
 
         var message_ok = 'Login was successful ✅'
-        
-        socket.emit('ok_username', {ok_key:result[0].name} , {chats_key:result[0].chats} );
+
+        Object.keys(result).forEach(function(key) {
+
+          var row = result[key];
+
+          socket.emit('ok_username', {ok_key:row.name} , {chats_key:row.chats} );
+
+
+        });
 
       }
 
@@ -159,8 +166,14 @@ io.on('connection', function(socket){
 
     con.query("SELECT name,image,tag FROM users WHERE username = '"+username+"' " , function (err, result) {
 
-      socket.emit('send_details_user', { name_user: result[0].name , image_user: result[0].image , tag_user: result[0].tag } );
-    
+      Object.keys(result).forEach(function(key) {
+
+        var row = result[key];
+
+        socket.emit('send_details_user', { name_user: row.name , image_user: row.image , tag_user: row.tag } );
+
+      })
+
     });
 
   });
@@ -182,15 +195,22 @@ io.on('connection', function(socket){
 
 
       } else {
-        
-        var name = result[0].name_group;
-        var username = result[0].id_group;
-        var image = result[0].image;
-        var user_create = result[0].user_create;
-        var time = result[0].time;
-        
-        socket.emit("read_details_grouped", { message_name_group: name , message_username_group: username , message_image_group: image , message_user_create_group: user_create , message_time_group: time } );
+
+        Object.keys(result).forEach(function(key) {
+
+          var row = result[key];
+          
+          var name = row.name_group;
+          var username = row.id_group;
+          var image = row.image;
+          var user_create = row.user_create;
+          var time = row.time;
+          
+          socket.emit("read_details_grouped", { message_name_group: name , message_username_group: username , message_image_group: image , message_user_create_group: user_create , message_time_group: time } );
       
+
+        })
+        
       }
 
     });
@@ -274,9 +294,15 @@ io.on('connection', function(socket){
     con.query("SELECT id,chat_name,id_user,image FROM save_message WHERE id_user = '"+username+"' " , function (err, result) {
 
       var message = 'Saved Message'
+
+      Object.keys(result).forEach(function(key) {
+
+        var row = result[key];
+
+        socket.emit('show_saved_message', { message_id: row.id , message_text: message , message_time: time , profile_img: row.image } );
+
+      })
       
-      socket.emit('show_saved_message', { message_id: result[0].id , message_text: message , message_time: time , profile_img: result[0].image } );
-  
     });
 
 });
@@ -294,15 +320,22 @@ io.on('connection', function(socket){
             socket.emit("null_select_user", {message_null:"no user found"} );
         
         } else {
+
+          Object.keys(result).forEach(function(key) {
+
+            var row = result[key];
+
+            var name = row.name;
+            var username = row.username;
+            var image = row.image;
+            var bio = row.bio;
+            var tag = row.tag;
           
-          var name = result[0].name;
-          var username = result[0].username;
-          var image = result[0].image;
-          var bio = result[0].bio;
-          var tag = result[0].tag;
-          
-          socket.emit("ok_select_user", {message_user_name:name , message_username:username  , message_user_image:image , message_user_bio:bio , message_user_tag:tag  } );
+            socket.emit("ok_select_user", {message_user_name:name , message_username:username  , message_user_image:image , message_user_bio:bio , message_user_tag:tag  } );
         
+
+          })
+          
         }
 
       });
@@ -371,7 +404,13 @@ io.on('connection', function(socket){
 
     con.query("SELECT name,image FROM users WHERE username = '"+username+"' " , function (err, result) {
 
-      socket.emit('sended_details_user2', { message_user_two:username , message_name_usertwo:result[0].name , message_img_usertwo:result[0].image } );
+      Object.keys(result).forEach(function(key) {
+
+        var row = result[key];
+
+        socket.emit('sended_details_user2', { message_user_two:username , message_name_usertwo:row.name , message_img_usertwo:row.image } );
+
+      })
 
     });
 
@@ -382,9 +421,15 @@ io.on('connection', function(socket){
     con.query("SELECT id,chat_name,id_user,image FROM channel_news WHERE id_user= '"+username+"' " , function (err, result) {
 
       var message = 'Chillchat News'
-      
-      socket.emit('show_channeled_news', { message_id: result[0].id , message_text: message , message_time: time , profile_img: result[0].image } );
 
+      Object.keys(result).forEach(function(key) {
+
+        var row = result[key];
+
+        socket.emit('show_channeled_news', { message_id: row.id , message_text: message , message_time: time , profile_img: row.image } );
+
+      })
+      
     });
 
   });
@@ -394,9 +439,15 @@ io.on('connection', function(socket){
     con.query("SELECT id,chat_name,id_user,image FROM bots WHERE id_user= '"+username+"' " , function (err, result) {
 
       var message = 'Mr.Friend'
-      
-      socket.emit('showed_bots', { message_id: result[0].id , message_text: message , message_time: time , profile_img: result[0].image } );
 
+      Object.keys(result).forEach(function(key) {
+
+        var row = result[key];
+
+        socket.emit('showed_bots', { message_id: row.id , message_text: message , message_time: time , profile_img: row.image } );
+
+      })
+      
     });
 
   });
@@ -468,15 +519,20 @@ io.on('connection', function(socket){
             socket.emit("null_selected_user", {message_null:"no user found"} );
         
         } else {
-          
-          var name = result[0].name;
-          var username = result[0].username;
-          var image = result[0].image;
-          var bio = result[0].bio;
-          var tag = result[0].tag;
-          
-          socket.emit("checked_username_add_member", {message_user_name:name , message_username:username  , message_user_image:image , message_user_bio:bio , message_user_tag:tag  } );
-        
+
+          Object.keys(result).forEach(function(key) {
+
+            var row = result[key];
+
+            var name = row.name;
+            var username = row.username;
+            var image = row.image;
+            var bio = row.bio;
+            var tag = row.tag;
+            
+            socket.emit("checked_username_add_member", {message_user_name:name , message_username:username  , message_user_image:image , message_user_bio:bio , message_user_tag:tag  } );  
+
+          })
         }
 
         });
