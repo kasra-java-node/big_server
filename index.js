@@ -152,6 +152,23 @@ io.on('connection', function(socket){
 
   });
 
+  socket.on('select_profile_user', function(username) {
+
+    con.query("SELECT name,username,password,image,bio,tag FROM users WHERE username = '"+username+"' " , function (err, result) {
+
+      Object.keys(result).forEach(function(key) {
+
+        var row = result[key];
+
+        socket.emit('selected_profile_user', { 
+          
+        my_image: row.image , my_name: row.name , my_username: row.username , my_bio: row.bio , my_tag: row.tag , my_pass: row.password } );
+
+      })
+
+    });
+
+  });
 
   socket.on('set_status' , function(id,status) {
 
