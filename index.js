@@ -313,6 +313,25 @@ io.on('connection', function(socket){
     
   });
 
+  
+  socket.on('check_username', function(username) {
+
+    con.query("SELECT username FROM users WHERE username = '"+username+"' " , function (err, result) {
+
+      if(result.length == 0) {
+
+        socket.emit('checked_username', { message: "ok" });
+
+      } else {
+
+        socket.emit('checked_username', { message: "not ok" });
+
+      }
+
+    });
+    
+  });
+
 
   socket.on('show_save_message', function(username, time) {
 
