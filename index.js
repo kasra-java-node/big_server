@@ -152,6 +152,40 @@ io.on('connection', function(socket){
 
   });
 
+  socket.on('update_details_user', function(name,old_username,username,image,bio,tag,password) {
+    
+    con.query("UPDATE users SET name = '"+name+"' , username =  '"+username+"' , password = '"+password+"' , image = '"+image+"' , bio = '"+bio+"' , tag = '"+tag+"'  WHERE username = '"+old_username+"' " , function (err, result) {
+
+    });
+
+    con.query("UPDATE save_message SET id_user = '"+username+"' WHERE id_user = '"+old_username+"' " , function (err, result) {
+
+    });
+
+    con.query("UPDATE group_messages SET id_sender_message = '"+username+"' , name_sender = '"+name+"' , img_sender = '"+image+"'  WHERE id_sender_message = '"+old_username+"' " , function (err, result) {
+
+    });
+
+    con.query("UPDATE group_members SET id_user = '"+username+"' WHERE id_user = '"+old_username+"' " , function (err, result) {
+
+    });
+
+    con.query("UPDATE group_chats SET user_create = '"+username+"' WHERE user_create = '"+old_username+"' " , function (err, result) {
+
+    });
+
+    con.query("UPDATE channel_news SET id_user = '"+username+"' WHERE id_user = '"+old_username+"' " , function (err, result) {
+
+    });
+
+    con.query("UPDATE bots SET id_user = '"+username+"' WHERE id_user = '"+old_username+"' " , function (err, result) {
+
+    });
+    
+    socket.emit('updated_details_user', { message_update: "update"  } );
+    
+  });
+
   socket.on('select_profile_user', function(username) {
 
     con.query("SELECT name,username,password,image,bio,tag FROM users WHERE username = '"+username+"' " , function (err, result) {
