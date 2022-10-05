@@ -204,7 +204,7 @@ io.on('connection', function(socket){
 
   });
 
-  socket.on('set_status' , function(id,status) {
+  socket.on('set_status', function(id,status) {
 
     con.query("UPDATE group_members SET status = '"+status+"' WHERE id_user = '"+id+"' " , function (err, result) {
 
@@ -212,9 +212,17 @@ io.on('connection', function(socket){
 
   });
 
+  socket.on('update_last_message', function(id,last_message) {
+    
+    con.query("UPDATE group_chats SET last_message = '"+last_message+"' WHERE id_group = '"+id+"' " , function (err, result) {
+
+    });
+
+  });
+
   socket.on("read_details_group" , function(id_group) {
 
-    con.query("SELECT name_group,id_group,image,user_create,time FROM group_chats WHERE id_group = '"+id_group+"' " , function (err, result) {
+    con.query("SELECT name_group,id_group,image,user_create,time,last_message FROM group_chats WHERE id_group = '"+id_group+"' " , function (err, result) {
 
       if (result.length == 0) {
 
@@ -230,8 +238,9 @@ io.on('connection', function(socket){
           var image = row.image;
           var user_create = row.user_create;
           var time = row.time;
+          var last = row.last_message;
           
-          socket.emit("read_details_grouped", { message_name_group: name , message_username_group: username , message_image_group: image , message_user_create_group: user_create , message_time_group: time } );
+          socket.emit("read_details_grouped", { message_name_group: name , message_username_group: username , message_image_group: image , message_user_create_group: user_create , message_time_group: time , last_message_group: last } );
       
 
         })
