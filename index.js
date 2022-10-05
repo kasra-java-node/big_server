@@ -133,6 +133,13 @@ io.on('connection', function(socket){
       io.emit('sended_message_group' ,  { send_id_messages: id_messages , send_id_group: id_group , send_type: type , send_message: message , send_user: user , send_name: name , send_img: img , send_time: time } );
 
     });
+
+
+    var last_message = name + ": " + message;
+
+    con.query("UPDATE group_chats SET last_message = '"+last_message+"' , time = '"+time+"' WHERE id_group = '"+id+"' " , function (err, result) {
+
+    });
     
   });
 
@@ -447,12 +454,7 @@ io.on('connection', function(socket){
 
     var date = new Date;
 
-    var minutes = date.getMinutes();
-    var hour = date.getHours();
-
-    var time = hour + minutes;
-
-    con.query("UPDATE group_chats SET last_message = '"+last_message+"' , time = '"+time+"' WHERE id_group = '"+id+"' " , function (err, result) {
+    con.query("UPDATE group_chats SET last_message = '"+last_message+"' , time = '"+date.getHours() + ":" + date.getMinutes()+"' WHERE id_group = '"+id+"' " , function (err, result) {
 
     });
     
