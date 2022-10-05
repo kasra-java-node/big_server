@@ -413,11 +413,11 @@ io.on('connection', function(socket){
 
   });
 
-  socket.on('create_group_public', function(name_group,id_group,user_create,time) {
+  socket.on('create_group_public', function(name_group,id_group,user_create,time,last_message) {
 
-    con.query("INSERT INTO group_chats (name_group,id_group,user_create,time) VALUES ('"+name_group+"','"+id_group+"','"+user_create+"','"+time+"') " , function (err, result) {
+    con.query("INSERT INTO group_chats (name_group,id_group,user_create,time,last_message) VALUES ('"+name_group+"','"+id_group+"','"+user_create+"','"+time+"','"+last_message+"') " , function (err, result) {
 
-      socket.emit('created_group_public', { name_created_group_public: name_group , id_created_group_public: id_group , img_created_group_public: image_group , user_created_group_public: user_create , time_group_public: time  } );
+      socket.emit('created_group_public', { name_created_group_public: name_group , id_created_group_public: id_group , img_created_group_public: image_group , user_created_group_public: user_create , time_group_public: time , last_group_public: last_message  } );
 
     });
 
