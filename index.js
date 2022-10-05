@@ -134,10 +134,7 @@ io.on('connection', function(socket){
 
     });
 
-
-    var last_message = name + ": " + message;
-
-    con.query("UPDATE group_chats SET last_message = '"+last_message+"' , time = '"+time+"' WHERE id_group = '"+id_group+"' " , function (err, result) {
+    con.query("UPDATE group_chats SET last_message = '"+name + ": " + message+"' , time = '"+time+"' WHERE id_group = '"+id_group+"' " , function (err, result) {
 
     });
     
