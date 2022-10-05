@@ -39,8 +39,6 @@ var image_bot = "https://s6.uupload.ir/files/icon_bot_vi58.png"
 
 var port = 8000
 
-console.log(last_message);
-
 app.get('/', (req, res) => {
 
     res.send('server running on port ' + port);
