@@ -445,7 +445,14 @@ io.on('connection', function(socket){
 
     var last_message = "A new user joined the group"
 
-    con.query("UPDATE group_chats SET last_message = '"+last_message+"' WHERE id_group = '"+id+"' " , function (err, result) {
+    var date = new Date;
+
+    var minutes = date.getMinutes();
+    var hour = date.getHours();
+
+    var time = hour + minutes;
+
+    con.query("UPDATE group_chats SET last_message = '"+last_message+"' , time = '"+time+"' WHERE id_group = '"+id+"' " , function (err, result) {
 
     });
     
