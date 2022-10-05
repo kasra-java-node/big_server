@@ -212,14 +212,6 @@ io.on('connection', function(socket){
 
   });
 
-  socket.on('update_last_message', function(id,last_message) {
-    
-    con.query("UPDATE group_chats SET last_message = '"+last_message+"' WHERE id_group = '"+id+"' " , function (err, result) {
-
-    });
-
-  });
-
   socket.on("read_details_group" , function(id_group) {
 
     con.query("SELECT name_group,id_group,image,user_create,time,last_message FROM group_chats WHERE id_group = '"+id_group+"' " , function (err, result) {
@@ -423,11 +415,11 @@ io.on('connection', function(socket){
 
   });
 
-  socket.on('create_group_private', function(name_group,id_group,user_create,time) {
+  socket.on('create_group_private', function(name_group,id_group,user_create,time,last_message) {
 
-    con.query("INSERT INTO group_chats (name_group,id_group,user_create,time) VALUES ('"+name_group+"','"+id_group+"','"+user_create+"','"+time+"') " , function (err, result) {
+    con.query("INSERT INTO group_chats (name_group,id_group,user_create,time,last_message) VALUES ('"+name_group+"','"+id_group+"','"+user_create+"','"+time+"','"+last_message+"') " , function (err, result) {
 
-      socket.emit('created_group_private', { name_created_group_private: name_group , id_created_group_private: id_group , img_created_group_private: image_group , user_created_group_private: user_create , time_group_private: time  } );
+      socket.emit('created_group_private', { name_created_group_private: name_group , id_created_group_private: id_group , img_created_group_private: image_group , user_created_group_private: user_create , time_group_private: time , last_group_private: last_message  } );
 
     });
 
@@ -447,7 +439,13 @@ io.on('connection', function(socket){
 
     con.query('INSERT INTO group_members (id_group,id_user) VALUES (?,?) ' , [id, username] , function (err, result) {
 
-      socket.emit('added_member_group', {message_adds : username} );
+      socket.emit('added_member_group', { message_adds:username , message_id:id } );
+
+    });
+
+    var last_message = "A new user joined the group"
+
+    con.query("UPDATE group_chats SET last_message = '"+last_message+"' WHERE id_group = '"+id+"' " , function (err, result) {
 
     });
     
