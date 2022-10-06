@@ -141,7 +141,6 @@ io.on('connection', function(socket){
 
       if (message == " was added to the group") {
 
-        
       } else {
 
         var last_message = name + ": " + message;
@@ -170,6 +169,47 @@ io.on('connection', function(socket){
 
     });
 
+  });
+
+  socket.on('select_group', function(username) {
+
+    con.query("SELECT id_group FROM group_members WHERE id_user = '"+username+"' " , function (err, result) {
+
+      if (result.length == 0) {
+
+        socket.emit("null_select_group", { message_null: "null" } );
+
+      } else {
+
+        Object.keys(result).forEach(function(key) {
+
+          var row = result[key];
+          
+          var id = row.id_group;
+
+          con.query("SELECT name_group,id_group,image,time,last_message FROM group_chats WHERE id_group = '"+id+"' " , function (err, result) {
+
+            Object.keys(result).forEach(function(key) {
+
+              var row = result[key];
+              
+              var name = row.name_group;
+              var id = row.id_group;
+              var image = row.image;
+              var time = row.time;
+              var last = row.last_message;
+
+              socket.emit("selected_group", { message_name_group: name , message_username_group: id , message_image_group: image , message_time_group: time , last_message_group: last } );
+
+            });
+
+          });
+
+        });
+      }
+
+    });
+    
   });
 
   socket.on('update_details_user', function(name,old_username,username,image,bio,tag,password) {
