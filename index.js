@@ -495,7 +495,7 @@ io.on('connection', function(socket){
     
   });
 
-  socket.on('add_member_group' , function(id,username) {
+  socket.on('add_member_group' , function(id,username,time) {
 
     con.query('INSERT INTO group_members (id_group,id_user) VALUES (?,?) ' , [id, username] , function (err, result) {
 
@@ -504,10 +504,8 @@ io.on('connection', function(socket){
     });
 
     var last_message = "A new user joined the group"
-
-    var date = new Date;
-
-    con.query("UPDATE group_chats SET last_message = '"+last_message+"' , time = '"+date.getHours() + ":" + date.getMinutes()+"' WHERE id_group = '"+id+"' " , function (err, result) {
+    
+    con.query("UPDATE group_chats SET last_message = '"+last_message+"' , time = '"+time+"' WHERE id_group = '"+id+"' " , function (err, result) {
 
     });
     
