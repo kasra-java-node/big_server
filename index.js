@@ -117,6 +117,34 @@ io.on('connection', function(socket){
     });
 
   });
+  
+  socket.on('seen_the_messages', function(group, username, time) {
+
+    con.query("SELECT id_message FROM group_messages WHERE id_group = '"+group+"' AND id_sender_message != '"+username+"' " , function (err, result) {
+
+      Object.keys(result).forEach(function(key) {
+
+        var row = result[key];
+      
+        con.query("SELECT id_message,id_user FROM seen WHERE id_message = '"+row.id_message+"' AND id_user = '"+username+"' " , function (err, result) {
+          
+          if (result.length == 0) {
+            
+            con.query('INSERT INTO seen (id_message,id_group,id_user,time) VALUES (?,?,?,?) ' , [row.id_message, group, username, time]  , function (err, result) {
+
+            });
+
+          } else {
+
+          }
+
+        });
+
+      });
+
+    });
+    
+  });
 
   socket.on('send_message_group' , function(id_messages, id_group ,type, message, user, name, img, time) {
 
